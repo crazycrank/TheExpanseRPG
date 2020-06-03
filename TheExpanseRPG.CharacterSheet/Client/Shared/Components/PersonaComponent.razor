@@ -1,0 +1,53 @@
+﻿@using TheExpanseRPG.CharacterSheet.Domain.Base
+@using TheExpanseRPG.CharacterSheet.Domain.Aggregates.CharacterAggregate.Persona
+
+    <div class="row">
+        <div class="form-group col character-field">
+            <StyledTextboxControl Label="Name" Value="@Persona.Name" OnChanged="@(args => { Persona.Name = args.Value as string; Changed(args); })" /> 
+        </div>
+        <div class="form-group col character-field">
+            <StyledSelectControl Label="Origin" Selected="Persona.Origin" Options="@(Enumeration.GetAll<Origin>())" OnChanged="@(args => { Persona.Origin = args.Value as Origin; Changed(args);})"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col character-field">
+            <StyledSelectControl Label="Background" Selected="Persona.Background" Options="@(Enumeration.GetAll<Background>())" OnChanged="@(args => { Persona.Background = args.Value as Background; Changed(args);})"/>
+        </div>
+        <div class="form-group col character-field">
+            <StyledSelectControl Label="Social Class" Selected="Persona.SocialClass" Options="@(Enumeration.GetAll<SocialClass>())" OnChanged="@(args => { Persona.SocialClass = args.Value as SocialClass; Changed(args);})"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col character-field">
+            <StyledSelectControl Label="Profession" Selected="Persona.Profession" Options="@(Enumeration.GetAll<Profession>())" OnChanged="@(args => { Persona.Profession = args.Value as Profession; Changed(args);})" />
+        </div>
+        <div class="form-group col character-field">
+            <StyledSelectControl Label="Drive" Selected="Persona.Drive" Options="@(Enumeration.GetAll<Drive>())" OnChanged="@(args => { Persona.Drive = args.Value as Drive; Changed(args);})" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col character-field">
+            <StyledTextboxControl Label="Appearance" Value="@Persona.Appearance" OnChanged="@(args => { Persona.Appearance = args.Value as string; Changed(args); })" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col character-field">
+            <StyledTextboxControl Label="Goals" Value="@Persona.Goals" OnChanged="@(args => { Persona.Goals = args.Value as string; Changed(args); })" />
+        </div>
+    </div>
+
+@code {
+
+    [Parameter]
+    public Persona Persona { get; set; }
+
+    [Parameter]
+    public EventCallback<Persona> PersonaChanged { get; set; }
+
+    private void Changed(ChangeEventArgs args)
+    {
+        Console.WriteLine($"Received ChangedEventArgs '{args.Value}'");
+        PersonaChanged.InvokeAsync(Persona);
+    }
+
+}

@@ -1,0 +1,55 @@
+﻿@using TheExpanseRPG.CharacterSheet.Domain.Base
+<label for="input-field" class="sr-only">@Label</label>
+<div class="input-group mb-2">
+    <div class="input-group-prepend">
+        <div class="input-group-text">@Label</div>
+    </div>
+    <select class="form-control" id="input-field" @onchange="Changed">
+        <option></option>
+        @foreach (var option in Options)
+        {
+            <option value="@(option.Name)" selected="@(Selected == option)">@(option.Name)</option>
+        }
+    </select>
+</div>
+@code {
+    [Parameter]
+    public string Label { get; set; }
+
+    //private Enumeration _selected;
+
+    //[Parameter]
+    //public Enumeration Selected 
+    //{
+    //    get => _selected;
+    //    set
+    //    {
+    //        var hasChanged = value != _selected;
+    //        if (hasChanged)
+    //        {
+    //            _selected = value;
+    //            _ = OnChanged.InvokeAsync(new ChangeEventArgs
+    //            {
+    //                Value = value
+
+    //            });
+    //        }
+    //        Console.WriteLine($"Value of '{Label}' changed to '{_selected}'");
+    //    }
+    //}
+
+    [Parameter]
+    public Enumeration Selected { get; set; }
+
+    [Parameter]
+    public IEnumerable<Enumeration> Options { get; set; }
+
+    [Parameter]
+    public EventCallback<ChangeEventArgs> OnChanged { get; set; }
+
+    private async Task Changed(ChangeEventArgs args)
+    {
+        var option = Options.Single(o => o.Name == args.Value as string);
+        await OnChanged.InvokeAsync(new ChangeEventArgs {Value = option});
+    }
+}

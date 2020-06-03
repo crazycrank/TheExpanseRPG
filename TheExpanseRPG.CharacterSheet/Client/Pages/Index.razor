@@ -1,0 +1,42 @@
+﻿@page "/"
+@using Newtonsoft.Json
+@using TheExpanseRPG.CharacterSheet.Domain.Aggregates.CharacterAggregate
+
+<h1>Character</h1>
+<SheetSectionControl Title="Character">
+    <PersonaComponent @bind-Persona="character.Persona" />
+</SheetSectionControl>
+
+<AbilitiesComponent />
+<BaseStatsComponent />
+
+<SheetSectionControl Title="Debug">
+    <button @onclick="OnChangeName">Change Name</button>
+    <button @onclick="OnRefreshStatic">Refresh Static</button>
+    <SheetSectionControl Title="Dynamic">
+        <pre>
+@JsonConvert.SerializeObject(character, Formatting.Indented)
+    </pre>
+    </SheetSectionControl>
+    <SheetSectionControl Title="Static">
+        <pre>
+@Text
+    </pre>
+    </SheetSectionControl>
+</SheetSectionControl>
+
+
+@code
+{
+    Character character = new Character();
+    public string Text = string.Empty;
+
+    public void OnChangeName()
+    {
+        character.Persona.Name = "Test";
+    }
+    public void OnRefreshStatic()
+    {
+        this.Text = JsonConvert.SerializeObject(character, Formatting.Indented);
+    }
+}

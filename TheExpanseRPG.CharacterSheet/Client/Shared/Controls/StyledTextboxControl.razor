@@ -1,0 +1,36 @@
+﻿<label for="input-field" class="sr-only">@Label</label>
+<div class="input-group mb-2">
+    <div class="input-group-prepend">
+        <div class="input-group-text">@Label</div>
+    </div>
+    <input type="text" class="form-control" id="input-field-@Label" value="@Value" @onchange="OnChanged" />
+</div>
+@code {
+
+    [Parameter]
+    public string Label { get; set; }
+
+    private string _value;
+
+    [Parameter]
+    public string Value
+    {
+        get => _value;
+        set
+        {
+            var hasChanged = !EqualityComparer<string>.Default.Equals(value, _value);
+            if (hasChanged)
+            {
+                _value = value;
+                _ = OnChanged.InvokeAsync(new ChangeEventArgs
+                {
+                    Value = value
+                });
+                Console.WriteLine($"Value of '{Label}' changed to '{_value}'");
+            }
+        }
+    }
+
+    [Parameter]
+    public EventCallback<ChangeEventArgs> OnChanged { get; set; }
+}
