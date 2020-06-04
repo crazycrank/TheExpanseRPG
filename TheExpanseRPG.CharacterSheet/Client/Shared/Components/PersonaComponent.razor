@@ -1,42 +1,32 @@
 ﻿@using TheExpanseRPG.CharacterSheet.Domain.Base
 @using TheExpanseRPG.CharacterSheet.Domain.Aggregates.CharacterAggregate.Persona
+@using Microsoft.Extensions.Logging
 
-    <div class="row">
-        <div class="form-group col character-field">
-            <StyledTextboxControl Label="Name" Value="@Persona.Name" OnChanged="@(args => { Persona.Name = args.Value as string; Changed(args); })" /> 
-        </div>
-        <div class="form-group col character-field">
-            <StyledSelectControl Label="Origin" Selected="Persona.Origin" Options="@(Enumeration.GetAll<Origin>())" OnChanged="@(args => { Persona.Origin = args.Value as Origin; Changed(args);})"/>
-        </div>
-    </div>
-    <div class="row">
-        <div class="form-group col character-field">
-            <StyledSelectControl Label="Background" Selected="Persona.Background" Options="@(Enumeration.GetAll<Background>())" OnChanged="@(args => { Persona.Background = args.Value as Background; Changed(args);})"/>
-        </div>
-        <div class="form-group col character-field">
-            <StyledSelectControl Label="Social Class" Selected="Persona.SocialClass" Options="@(Enumeration.GetAll<SocialClass>())" OnChanged="@(args => { Persona.SocialClass = args.Value as SocialClass; Changed(args);})"/>
-        </div>
-    </div>
-    <div class="row">
-        <div class="form-group col character-field">
-            <StyledSelectControl Label="Profession" Selected="Persona.Profession" Options="@(Enumeration.GetAll<Profession>())" OnChanged="@(args => { Persona.Profession = args.Value as Profession; Changed(args);})" />
-        </div>
-        <div class="form-group col character-field">
-            <StyledSelectControl Label="Drive" Selected="Persona.Drive" Options="@(Enumeration.GetAll<Drive>())" OnChanged="@(args => { Persona.Drive = args.Value as Drive; Changed(args);})" />
-        </div>
-    </div>
-    <div class="row">
-        <div class="form-group col character-field">
-            <StyledTextboxControl Label="Appearance" Value="@Persona.Appearance" OnChanged="@(args => { Persona.Appearance = args.Value as string; Changed(args); })" />
-        </div>
-    </div>
-    <div class="row">
-        <div class="form-group col character-field">
-            <StyledTextboxControl Label="Goals" Value="@Persona.Goals" OnChanged="@(args => { Persona.Goals = args.Value as string; Changed(args); })" />
-        </div>
-    </div>
+<div class="row">
+    <StyledTextboxControl Label="Name" Value="@Persona.Name" ValueChanged="@(args => { Persona.Name = args.Value as string; OnChanged(args); })" />
+</div>
+<div class="row">
+    <StyledSelectControl Label="Origin" Selected="Persona.Origin" Options="@(Enumeration.GetAll<Origin>())" SelectedChanged="@(args => { Persona.Origin = args.Value as Origin; OnChanged(args);})" />
+</div>
+<div class="row">
+    <StyledSelectControl Label="Background" Selected="Persona.Background" Options="@(Enumeration.GetAll<Background>())" SelectedChanged="@(args => { Persona.Background = args.Value as Background; OnChanged(args);})" />
+</div>
+<div class="row">
+    <StyledSelectControl Label="Social Class" Selected="Persona.SocialClass" Options="@(Enumeration.GetAll<SocialClass>())" SelectedChanged="@(args => { Persona.SocialClass = args.Value as SocialClass; OnChanged(args);})" />
+</div>
+<div class="row">
+    <StyledSelectControl Label="Profession" Selected="Persona.Profession" Options="@(Enumeration.GetAll<Profession>())" SelectedChanged="@(args => { Persona.Profession = args.Value as Profession; OnChanged(args);})" />
+</div>
+<div class="row">
+    <StyledSelectControl Label="Drive" Selected="Persona.Drive" Options="@(Enumeration.GetAll<Drive>())" SelectedChanged="@(args => { Persona.Drive = args.Value as Drive; OnChanged(args);})" />
+</div>
+<div class="row">
+    <StyledTextboxControl Label="Goals" Value="@Persona.Goals" ValueChanged="@(args => { Persona.Goals = args.Value as string; OnChanged(args); })" />
+</div>
 
 @code {
+    [Inject]
+    protected ILogger<PersonaComponent> Logger { get; set; }
 
     [Parameter]
     public Persona Persona { get; set; }
@@ -44,9 +34,9 @@
     [Parameter]
     public EventCallback<Persona> PersonaChanged { get; set; }
 
-    private void Changed(ChangeEventArgs args)
+    private void OnChanged(ChangeEventArgs args)
     {
-        Console.WriteLine($"Received ChangedEventArgs '{args.Value}'");
+        Logger.LogDebug($"Received ChangedEventArgs '{args.Value}'");
         PersonaChanged.InvokeAsync(Persona);
     }
 

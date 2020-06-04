@@ -1,45 +1,33 @@
-﻿<div class="row">
+﻿@using TheExpanseRPG.CharacterSheet.Domain.Aggregates.CharacterAggregate
+<div class="row">
     <div class="col">
-        <div class="row">
-            Speed
-        </div>
-        <div class="row">
-            [value]
-        </div>
+        <SheetSectionControl Title="Speed">
+            <h1>@SecondaryAbilities.Speed</h1>
+        </SheetSectionControl>
     </div>
     <div class="col">
-        <div class="row">
-            Defense
-        </div>
-        <div class="row">
-            [value]
-        </div>
+        <SheetSectionControl Title="Defense">
+            <h1>@SecondaryAbilities.Defense</h1>
+        </SheetSectionControl>
     </div>
     <div class="col">
-        <div class="row">
-            Toughness
-        </div>
-        <div class="row">
-            [value]
-        </div>
+        <SheetSectionControl Title="Toughness">
+            <h1>@SecondaryAbilities.Toughness</h1>
+        </SheetSectionControl>
     </div>
     <div class="col">
-        <div class="row">
-            Armor
-        </div>
-        <div class="row">
-            [value]
-        </div>
+        <SheetSectionControl Title="Armor">
+            <h1>0</h1>
+        </SheetSectionControl>
     </div>
     <div class="col">
-        <div class="row">
-            Penalty
-        </div>
-        <div class="row">
-            [value]
-        </div>
+        <SheetSectionControl Title="Penalty">
+            <h1>0</h1>
+        </SheetSectionControl>
     </div>
 </div>
 
 @code {
+    [Parameter]
+    public SecondaryAbilities SecondaryAbilities { get; set; }
 }

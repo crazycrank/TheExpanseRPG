@@ -1,28 +1,57 @@
 ﻿@page "/"
+@page "/CharacterSheet"
+
 @using Newtonsoft.Json
 @using TheExpanseRPG.CharacterSheet.Domain.Aggregates.CharacterAggregate
 
-<h1>Character</h1>
-<SheetSectionControl Title="Character">
-    <PersonaComponent @bind-Persona="character.Persona" />
-</SheetSectionControl>
-
-<AbilitiesComponent />
-<BaseStatsComponent />
+<div class="container-lg" style="border: 1px solid black">
+    <div class="row">
+        <div class="col-4">
+            <div class="row">
+                <img src="images/logo.png" class="img-fluid"/>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <SheetSectionControl Title="Character">
+                        <PersonaComponent Persona="@character.Persona" PersonaChanged="@CharacterChanged"/>
+                    </SheetSectionControl>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <SheetSectionControl Title="Abilities">
+                        <AbilitiesComponent Abilities="@character.Abilities" AbilitiesChanged="@CharacterChanged"/>
+                    </SheetSectionControl>
+                </div>
+            </div>
+        </div>
+        <div class="col-8">
+            <div class="row">
+                <div class="col-10">
+                    <SheetSectionControl Title="Appearance">
+                        <StyledTextboxControl Label="Appearance" Value="@character.Persona.Appearance" ValueChanged="@(args => { character.Persona.Appearance = args.Value as string; CharacterChanged(); })"/>
+                    </SheetSectionControl>
+                </div>
+                <div class="col-2">
+                    <SheetSectionControl Title="Move">
+                        <h1>0</h1>
+                    </SheetSectionControl>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-10">
+                    <BaseStatsComponent SecondaryAbilities="@character.SecondaryAbilities"/>
+                </div>
+                <div class="col-2"></div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <SheetSectionControl Title="Debug">
-    <button @onclick="OnChangeName">Change Name</button>
-    <button @onclick="OnRefreshStatic">Refresh Static</button>
-    <SheetSectionControl Title="Dynamic">
-        <pre>
+    <pre>
 @JsonConvert.SerializeObject(character, Formatting.Indented)
-    </pre>
-    </SheetSectionControl>
-    <SheetSectionControl Title="Static">
-        <pre>
-@Text
-    </pre>
-    </SheetSectionControl>
+        </pre>
 </SheetSectionControl>
 
 
@@ -35,8 +64,9 @@
     {
         character.Persona.Name = "Test";
     }
-    public void OnRefreshStatic()
+
+    private void CharacterChanged()
     {
-        this.Text = JsonConvert.SerializeObject(character, Formatting.Indented);
+        character.RecalculateSecondaryAbilities();
     }
 }

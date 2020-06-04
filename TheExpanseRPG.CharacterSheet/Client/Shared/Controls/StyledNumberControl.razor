@@ -3,14 +3,14 @@
     <div class="input-group-prepend">
         <div class="input-group-text">@Label</div>
     </div>
-    <input type="text" class="form-control" id="input-field-@Label" value="@Value" @onchange="ValueChanged" />
+    <input type="text" step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control" id="input-field-@Label" value="@Value" @onchange="ValueChanged" />
 </div>
 @code {
     [Parameter]
     public string Label { get; set; }
 
     [Parameter]
-    public string Value { get; set; }
+    public int Value { get; set; }
 
     [Parameter]
     public EventCallback<ChangeEventArgs> ValueChanged { get; set; }

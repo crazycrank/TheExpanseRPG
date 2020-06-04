@@ -1,33 +1,47 @@
-﻿<EditForm Model="@(new object())">
-    <div class="form-group row">
-        <StyledTextboxControl Label="Accuracy"/>
-    </div>
-    <div class="form-group row">
-        <StyledTextboxControl Label="Communication"/>
-    </div>
-    <div class="form-group row">
-        <StyledTextboxControl Label="Constitution"/>
-    </div>
-    <div class="form-group row">
-        <StyledTextboxControl Label="Dexterity"/>
-    </div>
-    <div class="form-group row">
-        <StyledTextboxControl Label="Fighting"/>
-    </div>
-    <div class="form-group row">
-        <StyledTextboxControl Label="Intelligence"/>
-    </div>
-    <div class="form-group row">
-        <StyledTextboxControl Label="Perception"/>
-    </div>
-    <div class="form-group row">
-        <StyledTextboxControl Label="Strength"/>
-    </div>
-    <div class="form-group row">
-        <StyledTextboxControl Label="Willpower"/>
-    </div>
-</EditForm>
+﻿@using TheExpanseRPG.CharacterSheet.Domain.Aggregates.CharacterAggregate
+@using Microsoft.Extensions.Logging
+
+<div class="row">
+    <StyledNumberControl Label="Accuracy" Value="@Abilities.Accuracy" ValueChanged="@(args => { Abilities.Accuracy = int.TryParse(args.Value as string, out var result) ? result : Abilities.Accuracy; OnChanged(args); })" />
+</div>
+<div class="row">
+    <StyledNumberControl Label="Communication" Value="@Abilities.Communication" ValueChanged="@(args => { Abilities.Communication = int.TryParse(args.Value as string, out var result) ? result : Abilities.Communication; OnChanged(args); })" />
+</div>
+<div class="row">
+    <StyledNumberControl Label="Constitution" Value="@Abilities.Constitution" ValueChanged="@(args => { Abilities.Constitution = int.TryParse(args.Value as string, out var result) ? result : Abilities.Constitution; OnChanged(args); })" />
+</div>
+<div class="row">
+    <StyledNumberControl Label="Dexterity" Value="@Abilities.Dexterity" ValueChanged="@(args => { Abilities.Dexterity = int.TryParse(args.Value as string, out var result) ? result : Abilities.Dexterity; OnChanged(args); })" />
+</div>
+<div class="row">
+    <StyledNumberControl Label="Fighting" Value="@Abilities.Fighting" ValueChanged="@(args => { Abilities.Fighting = int.TryParse(args.Value as string, out var result) ? result : Abilities.Fighting; OnChanged(args); })" />
+</div>
+<div class="row">
+    <StyledNumberControl Label="Intelligence" Value="@Abilities.Intelligence" ValueChanged="@(args => { Abilities.Intelligence = int.TryParse(args.Value as string, out var result) ? result : Abilities.Intelligence; OnChanged(args); })" />
+</div>
+<div class="row">
+    <StyledNumberControl Label="Perception" Value="@Abilities.Perception" ValueChanged="@(args => { Abilities.Perception = int.TryParse(args.Value as string, out var result) ? result : Abilities.Perception; OnChanged(args); })" />
+</div>
+<div class="row">
+    <StyledNumberControl Label="Strength" Value="@Abilities.Strength" ValueChanged="@(args => { Abilities.Strength = int.TryParse(args.Value as string, out var result) ? result : Abilities.Strength; OnChanged(args); })" />
+</div>
+<div class="row">
+    <StyledNumberControl Label="Willpower" Value="@Abilities.Willpower" ValueChanged="@(args => { Abilities.Willpower = int.TryParse(args.Value as string, out var result) ? result : Abilities.Willpower; OnChanged(args); })" />
+</div>
 
 @code {
+    [Inject]
+    protected ILogger<AbilitiesComponent> Logger { get; set; }
 
+    [Parameter]
+    public Abilities Abilities { get; set; }
+
+    [Parameter]
+    public EventCallback<Abilities> AbilitiesChanged { get; set; }
+
+    private void OnChanged(ChangeEventArgs args)
+    {
+        Console.WriteLine($"Received ChangedEventArgs '{args.Value}'");
+        AbilitiesChanged.InvokeAsync(Abilities);
+    }
 }

@@ -4,7 +4,7 @@
     <div class="input-group-prepend">
         <div class="input-group-text">@Label</div>
     </div>
-    <select class="form-control" id="input-field" @onchange="Changed">
+    <select class="form-control" id="input-field" @onchange="OnChanged">
         <option></option>
         @foreach (var option in Options)
         {
@@ -16,28 +16,6 @@
     [Parameter]
     public string Label { get; set; }
 
-    //private Enumeration _selected;
-
-    //[Parameter]
-    //public Enumeration Selected 
-    //{
-    //    get => _selected;
-    //    set
-    //    {
-    //        var hasChanged = value != _selected;
-    //        if (hasChanged)
-    //        {
-    //            _selected = value;
-    //            _ = OnChanged.InvokeAsync(new ChangeEventArgs
-    //            {
-    //                Value = value
-
-    //            });
-    //        }
-    //        Console.WriteLine($"Value of '{Label}' changed to '{_selected}'");
-    //    }
-    //}
-
     [Parameter]
     public Enumeration Selected { get; set; }
 
@@ -45,11 +23,11 @@
     public IEnumerable<Enumeration> Options { get; set; }
 
     [Parameter]
-    public EventCallback<ChangeEventArgs> OnChanged { get; set; }
+    public EventCallback<ChangeEventArgs> SelectedChanged { get; set; }
 
-    private async Task Changed(ChangeEventArgs args)
+    private async Task OnChanged(ChangeEventArgs args)
     {
         var option = Options.Single(o => o.Name == args.Value as string);
-        await OnChanged.InvokeAsync(new ChangeEventArgs {Value = option});
+        await SelectedChanged.InvokeAsync(new ChangeEventArgs {Value = option});
     }
 }
