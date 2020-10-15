@@ -6,46 +6,23 @@ using System.Text;
 
 namespace TheExpanseRPG.CharacterSheet.Domain.Base
 {
-    public abstract class KeyedEnumeration : IComparable
+    public abstract class KeyedEnumeration<T> : Enumeration
+        where T: struct
     {
-        public string Name { get; private set; }
-
-        public int Id { get; private set; }
+        public T Id { get; private set; }
 
         protected KeyedEnumeration()
         { }
 
-        protected KeyedEnumeration(int id, string name)
+        protected KeyedEnumeration(T id, string name)
+        : base(name)
         {
             this.Id = id;
-            this.Name = name;
         }
 
         public override string ToString() => this.Name;
 
-        public static IEnumerable<T> GetAll<T>() where T : KeyedEnumeration
-        {
-            var fields = typeof(T).GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly);
-
-            return fields.Select(f => f.GetValue(null)).Cast<T>();
-        }
-
-        public override bool Equals(object obj)
-        {
-            var otherValue = obj as KeyedEnumeration;
-
-            if (otherValue == null)
-                return false;
-
-            var typeMatches = this.GetType().Equals(obj.GetType());
-            var valueMatches = this.Id.Equals(otherValue.Id);
-
-            return typeMatches && valueMatches;
-        }
-
-        public override int GetHashCode() => this.Id.GetHashCode();
-
-        public static int AbsoluteDifference(KeyedEnumeration firstValue, KeyedEnumeration secondValue)
+        public static int AbsoluteDifference(KeyedEnumeration<T> firstValue, KeyedEnumeration<T> secondValue)
         {
             var absoluteDifference = Math.Abs(firstValue.Id - secondValue.Id);
             return absoluteDifference;
